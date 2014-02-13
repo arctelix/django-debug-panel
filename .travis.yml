@@ -5,7 +5,7 @@ python:
   - 3.2
   - 3.3
 install:
-  - pip install django-debug-toolbar.
+  - pip install django-debug-toolbar
   - pip install -r requirements-dev.txt
   - pip install https://github.com/django/django/archive/${DJANGO}.zip#egg=django
 script: make test
