@@ -1,0 +1,36 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<h1>{{ status_line }}</h1>
+<p class="notice">
+	{% trans "The Django Debug Toolbar has intercepted the folowing ajax requests. You can deslelect any requests you do not want to debug in the future." %}
+	<br>
+	{% trans "**The deselect feature is not enabled yet.**" %}
+</p>
+
+<h4>{% trans "Ajax Requests" %}</h4>
+<table>
+	<thead>
+		<tr>
+			<th>{% trans "Path" %}</th>
+			<th>{% trans "REQUEST" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for i in ajax_requests %}
+			<tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
+				<td>{{ i.path|escape }}</td>
+				<td>{{ i.perams|escape }}</td>
+				<td><input type="checkbox" id="intercept_ajax" ></td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+<script type="text/javascript">
+    document.getElementById('intercept_ajax').focus();
+</script>
+</body>
+</html>

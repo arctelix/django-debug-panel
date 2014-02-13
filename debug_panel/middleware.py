@@ -1,7 +1,7 @@
 """
 Debug Panel middleware
 """
-from debug_toolbar.middleware import DebugToolbarMiddleware
+from debug_toolbar.middleware import DebugToolbarMiddleware, show_toolbar
 from django.core.urlresolvers import reverse, resolve, Resolver404
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -13,6 +13,24 @@ from debug_panel.cache import cache
 # the urls patterns that concern only the debug_panel application
 import debug_panel.urls
 
+from debug_toolbar import middleware
+from django.conf import settings
+from debug_toolbar.toolbar import DebugToolbar
+def show_toolbar(request):
+        """
+        Replaces the default function to determine whether to show the toolbar on a given page.
+        """
+        if request.META.get('REMOTE_ADDR', None) not in settings.INTERNAL_IPS:
+            return False
+
+        #Prevent ajax requests from being processed if ajax is disabled
+        if request.is_ajax():
+            if not DebugToolbar(request).get_panel_by_id('AjaxPanel').enabled:
+                return False
+        
+        return bool(settings.DEBUG)
+
+middleware.show_toolbar = show_toolbar
 
 class DebugPanelMiddleware(DebugToolbarMiddleware):
     """
