@@ -15,4 +15,5 @@ setup(
     install_requires=[
         "django-debug-toolbar >= 0.9.0"
     ],
+    test_suite = "tests.runtests.runtests",
 )

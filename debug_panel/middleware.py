@@ -12,7 +12,7 @@ from debug_panel.cache import cache
 
 # the urls patterns that concern only the debug_panel application
 import debug_panel.urls
-
+from debug_toolbar import settings as dt_settings
 from debug_toolbar import middleware
 from django.conf import settings
 from debug_toolbar.toolbar import DebugToolbar
@@ -48,11 +48,17 @@ class DebugPanelMiddleware(DebugToolbarMiddleware):
 
         Otherwise we fallback to the default debug_toolbar middleware.
         """
-
         try:
             res = resolve(request.path, urlconf=debug_panel.urls)
         except Resolver404:
-            return super(DebugPanelMiddleware, self).process_request(request)
+
+            #return super(DebugPanelMiddleware, self).process_request(request)
+
+
+            if show_toolbar(request):
+                return super(DebugPanelMiddleware, self).process_request(request)
+            else:
+                return None
 
         return res.func(request, *res.args, **res.kwargs)
 
